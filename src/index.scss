@@ -33,7 +33,7 @@
 }
 
 .sidebar {
-  @apply h-screen min-w-c85 w-c85 bg-gray-10 border-r border-l-0 border-gray-20 py-4 relative z-20 overflow-y-auto;
+  @apply h-screen min-w-c85 w-c85 bg-gray-10 border-r border-l-0 border-gray-20 py-4 relative z-20 overflow-auto;
   &__logo {
     @apply w-c60 h-c60 bg-blue-10 rounded-md p-3 mx-auto mb-3;
   }
@@ -44,7 +44,7 @@
     }
   }
   &-menu {
-    @apply absolute left-0 z-10 min-w-c310 w-c310 h-full border-r p-7 border-gray-20 bg-gray-30 -ml-c225;
+    @apply absolute left-0 z-10 min-w-c310 w-c310 h-full border-r p-7 border-gray-20 bg-gray-30 -ml-c225 overflow-y-auto overflow-x-hidden;
     @apply lg:relative lg:-ml-c310;
     &.active {
       @apply ml-0 left-c85;

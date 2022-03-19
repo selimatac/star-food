@@ -1,8 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { PrinterIcon } from "@heroicons/react/outline";
+import { updateOrderStatus } from "../../store/actions/ordersActions";
+import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
+import { useDispatch } from "react-redux";
 
 const OrderItem = ({ data }) => {
+  useFirestoreConnect("orders");
+  const firestore = useFirestore();
+  const dispatch = useDispatch();
+  const moveToCooking = async () => {
+    await dispatch(updateOrderStatus({ firestore }, data, "cooking"));
+  };
   return (
     <div className="order-item">
       <div className="order-item__info">
@@ -20,7 +29,13 @@ const OrderItem = ({ data }) => {
         </div>
         <div>
           Trans Type
-          <div className={`text-white star-badge ${data?.transType === 'Takeaway' ? 'star-badge__orange':'star-badge__primary'} `}>
+          <div
+            className={`text-white star-badge ${
+              data?.transType === "Takeaway"
+                ? "star-badge__orange"
+                : "star-badge__primary"
+            } `}
+          >
             {data?.transType}
           </div>
         </div>
@@ -45,7 +60,11 @@ const OrderItem = ({ data }) => {
           <button className="mr-5">
             <PrinterIcon className="w-8 text-gray-70" />
           </button>
-          <button className="star-btn star-btn__primary" type="button">
+          <button
+            className="star-btn star-btn__primary"
+            type="button"
+            onClick={moveToCooking}
+          >
             Move to Cooking
           </button>
         </div>
