@@ -11,10 +11,12 @@ import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { createOrder } from "../store/actions/ordersActions";
 import { XIcon } from "@heroicons/react/outline";
+import { useNavigate } from "react-router-dom";
 const NewOrder = () => {
   useFirestoreConnect("orderItems");
   const firestore = useFirestore();
   const dispatch = useDispatch();
+  let navigate = useNavigate();
   const products = useSelector((state) => state.firestore.ordered.orderItems);
   const [selectedOrderItems, setSelectedOrderItems] = useState([]);
 
@@ -37,13 +39,19 @@ const NewOrder = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createOrder({ firestore }, formData));
+    await dispatch(createOrder({ firestore }, formData));
+    navigate(`/orders`);
   };
   const handleRemoveSelectedProduct = (id) => {
-    window.confirm("Are u sure?") &&
+    if (window.confirm("Are u sure?")) {
       setSelectedOrderItems([...selectedOrderItems.filter((x) => x.id !== id)]);
+      setFormData({
+        ...formData,
+        orderItems: formData.orderItems.filter((x) => x.id !== id),
+      });
+    }
   };
   const handleQuantityChange = (id, v) => {
     let t = selectedOrderItems;
@@ -164,6 +172,7 @@ const NewOrder = () => {
             placeholder="Choose"
             value={formData.orderItems}
             data={products}
+            required
             onChange={(values) =>
               setFormData({ ...formData, orderItems: values })
             }

@@ -12,6 +12,7 @@ const StarDropdown = ({
   data,
   onChange,
   className,
+  required,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleSelectChange = (isChecked, item) => {
@@ -55,6 +56,12 @@ const StarDropdown = ({
           )}
         </div>
       </ClickAwayListener>
+      <select className="opacity-0 absolute" multiple required={required} value={value.map((x) => x.id)}>
+        <option value=""></option>
+        {data?.map((x) => (
+          <option key={x.id} value={x.id}>{x.text}</option>
+        ))}
+      </select>
     </div>
   );
 };
@@ -68,5 +75,6 @@ StarDropdown.propTypes = {
   data: PropTypes.array,
   onChange: PropTypes.func,
   className: PropTypes.string,
+  required: PropTypes.string,
 };
 export default StarDropdown;
