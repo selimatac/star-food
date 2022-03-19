@@ -9,6 +9,7 @@ import NewOrder from "../pages/NewOrder";
 import StarInput from "./common/StarInput";
 import StarTextarea from "./common/StarTextarea";
 import StarDropdown from "./common/StarDropdown";
+import StarNumberInput from "./common/StarNumberInput";
 export {
   Sidebar,
   SidebarMenu,
@@ -18,4 +19,5 @@ export {
   OrderItem,
   NewOrder,
   Orders,
+  StarNumberInput,
 };

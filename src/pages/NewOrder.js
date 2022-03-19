@@ -1,34 +1,92 @@
-import React, { useState } from "react";
-import { StarDropdown, StarInput, StarTextarea } from "../components";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
+import {
+  StarDropdown,
+  StarInput,
+  StarNumberInput,
+  StarTextarea,
+} from "../components";
 import moment from "moment";
-
+import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { createOrder } from "../store/actions/ordersActions";
+import { XIcon } from "@heroicons/react/outline";
 const NewOrder = () => {
-  const [orderNumber, setOrderNumber] = useState(Date.now());
-  const [orderDateTime, setOrderDateTime] = useState(moment().format("LLL"));
+  useFirestoreConnect("orderItems");
+  const firestore = useFirestore();
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.firestore.ordered.orderItems);
+  const [selectedOrderItems, setSelectedOrderItems] = useState([]);
+
   const [formData, setFormData] = useState({
+    orderNumber: Date.now(),
+    orderDateTime: moment().format("LLL"),
+    orderStatus: "new",
     name: "",
     contact: "",
     transType: "Delivery",
     message: "",
     orderItems: [],
+    totalAmount: "",
+    selectedItems: [],
   });
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createOrder({ firestore }, formData));
+  };
+  const handleRemoveSelectedProduct = (id) => {
+    window.confirm("Are u sure?") &&
+      setSelectedOrderItems([...selectedOrderItems.filter((x) => x.id !== id)]);
+  };
+  const handleQuantityChange = (id, v) => {
+    let t = selectedOrderItems;
+    t.find((x) => x.id === id).quantity = v.value;
+    setSelectedOrderItems([...t]);
+  };
+  const calcTotalAmount = () => {
+    const totalPrice = selectedOrderItems.map((x) => x.price * x.quantity);
+    setFormData({
+      ...formData,
+      totalAmount: totalPrice.reduce((a, b) => a + b, 0),
+      selectedItems: selectedOrderItems,
+    });
+  };
+
+  useEffect(() => {
+    let wq = [];
+    formData.orderItems.forEach((x) =>
+      wq.push({
+        ...x,
+        quantity: selectedOrderItems.find((s) => s.id === x.id)
+          ? selectedOrderItems.find((s) => s.id === x.id).quantity
+          : 1,
+      })
+    );
+    setSelectedOrderItems([...wq]);
+  }, [formData?.orderItems]);
+
+  useEffect(() => {
+    calcTotalAmount();
+  }, [selectedOrderItems]);
+
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form onSubmit={handleSubmit}>
       <div className="page__content-create-order">
         <div className="page__content-create-order__left">
           <div className="page__content-create-order__info">
             <div className="page__content-create-order__info-item">
-              <span>Order Number:</span> <span>#{orderNumber}</span>
+              <span>Order Number:</span> <span>#{formData.orderNumber}</span>
             </div>
             <div className="page__content-create-order__info-item">
               <span>Date/Time:</span>
-              <span>{orderDateTime}</span>
+              <span>{formData.orderDateTime}</span>
             </div>
           </div>
           <StarInput
@@ -38,6 +96,7 @@ const NewOrder = () => {
               name: "name",
               value: formData.name,
               placeholder: "Name",
+              required: true,
               onChange: handleChange,
             }}
             label="Name"
@@ -49,6 +108,7 @@ const NewOrder = () => {
               name: "contact",
               value: formData.contact,
               placeholder: "Contact",
+              required: true,
               onChange: handleChange,
             }}
             label="Contact"
@@ -65,6 +125,7 @@ const NewOrder = () => {
                 checked: formData.transType === "Delivery",
                 value: "Delivery",
                 className: "mb-3 mr-4",
+                required: true,
                 onChange: handleChange,
               }}
               className="mr-8 flex items-center justify-center !flex-row-reverse"
@@ -78,6 +139,7 @@ const NewOrder = () => {
                 checked: formData.transType === "Takeaway",
                 value: "Takeaway",
                 className: "mb-3 mr-4",
+                required: true,
                 onChange: handleChange,
               }}
               className="flex items-center justify-center !flex-row-reverse"
@@ -90,6 +152,7 @@ const NewOrder = () => {
               name: "message",
               value: formData.message,
               placeholder: "Message to client",
+              required: true,
               onChange: handleChange,
             }}
             label="Message to client"
@@ -100,15 +163,31 @@ const NewOrder = () => {
             name="orderItems"
             placeholder="Choose"
             value={formData.orderItems}
-            data={[
-              { id: "1", text: "Beef Stroganoff" },
-              { id: "2", text: "Reuben" },
-              { id: "3", text: "Sandwich" },
-            ]}
+            data={products}
             onChange={(values) =>
               setFormData({ ...formData, orderItems: values })
             }
           />
+          <div className="order-item__quantity">
+            {selectedOrderItems?.map((item, index) => (
+              <div className="order-item__quantity-wrapper" key={index}>
+                <div className="-title">{item?.text}</div>
+                <div className="-actions">
+                  <div className="-price">{item?.price}$</div>
+                  <StarNumberInput
+                    onChange={(value) => handleQuantityChange(item.id, value)}
+                  />
+                  <button
+                    className="-remove"
+                    type="button"
+                    onClick={() => handleRemoveSelectedProduct(item.id)}
+                  >
+                    <XIcon />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="page__content-create-order__right">
           <div className="page__content-create-order__delivery-details">
@@ -124,22 +203,28 @@ const NewOrder = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Beef</td>
-                  <td>1</td>
-                  <td>29$</td>
-                </tr>
+                {selectedOrderItems.map((x, index) => (
+                  <tr key={index}>
+                    <td>{x.text}</td>
+                    <td>{x.quantity}</td>
+                    <td>{x.price}$</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
           <div className="page__content-create-order__delivery-details">
             <h2 className="page__content-create-order__total-amount">
-              Total Amount: <span>84$</span>
+              Total Amount: <span>{formData.totalAmount}$</span>
             </h2>
           </div>
           <div className="page__content-create-order__buttons">
-            <button className="star-btn lg">Cancel</button>
-            <button className="star-btn star-btn__success lg">Add Order</button>
+            <button type="reset" className="star-btn lg">
+              Cancel
+            </button>
+            <button type="submit" className="star-btn star-btn__success lg">
+              Add Order
+            </button>
           </div>
         </div>
       </div>

@@ -20,7 +20,7 @@ const Sidebar = () => {
       >
         <CubeIcon xlinkTitle="Orders" className="w-6 text-black" />
       </NavLink>
-      <NavLink to="/blabla" className="sidebar__link" title="List">
+      <NavLink to="/collection" className="sidebar__link" title="List">
         <CollectionIcon xlinkTitle="List" className="w-6 text-black" />
       </NavLink>
       <NavLink to="/settings" className="sidebar__link" title="Settings">

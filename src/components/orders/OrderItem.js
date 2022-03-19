@@ -10,7 +10,7 @@ const OrderItem = ({ data }) => {
           Order Number<div>{data?.orderNumber}</div>
         </div>
         <div>
-          Date / Time<div>{data?.dateTime}</div>
+          Date / Time<div>{data?.orderDateTime}</div>
         </div>
         <div>
           Name<div>{data?.name}</div>
@@ -20,20 +20,20 @@ const OrderItem = ({ data }) => {
         </div>
         <div>
           Trans Type
-          <div className="star-badge star-badge__primary">
+          <div className={`text-white star-badge ${data?.transType === 'Takeaway' ? 'star-badge__orange':'star-badge__primary'} `}>
             {data?.transType}
           </div>
         </div>
         <div>
-          Amount<div>{data?.amount}</div>
+          Amount<div>{data?.totalAmount}$</div>
         </div>
       </div>
       <div className="order-item__ordered-items">
         <div className="-title">
           Ordered <div>Items</div>
         </div>
-        {data?.items.map((x) => (
-          <div className="-item">{`${x.title} X ${x.quantity}`}</div>
+        {data?.selectedItems.map((x, index) => (
+          <div className="-item" key={index}>{`${x.text} X ${x.quantity}`}</div>
         ))}
       </div>
       <div className="order-item__footer">

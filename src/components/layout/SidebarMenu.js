@@ -15,6 +15,7 @@ const SidebarMenu = ({ title, data }) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const SidebarMenu = ({ title, data }) => {
         <div className="sidebar-menu__list">
           {data?.map((x, i) => (
             <NavLink
-              to={x.url}
+              to={`list/${x.param}`}
               key={i}
               state={{ title: x.title }}
               className="sidebar-menu__list-item"

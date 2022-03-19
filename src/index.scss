@@ -22,12 +22,20 @@
   body {
     @apply font-display min-h-screen bg-white;
   }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 }
 
 .sidebar {
-  @apply h-screen min-w-[85px] w-[85px] bg-gray-10 border-r border-l-0 border-gray-20 py-4 relative z-20 overflow-y-auto;
+  @apply h-screen min-w-c85 w-c85 bg-gray-10 border-r border-l-0 border-gray-20 py-4 relative z-20 overflow-y-auto;
   &__logo {
-    @apply w-[60px] h-[60px] bg-blue-10 rounded-md p-3 mx-auto mb-3;
+    @apply w-c60 h-c60 bg-blue-10 rounded-md p-3 mx-auto mb-3;
   }
   &__link {
     @apply w-full h-16 flex justify-center items-center transition-colors;
@@ -36,10 +44,10 @@
     }
   }
   &-menu {
-    @apply absolute left-0 z-10 min-w-[310px] w-[310px] h-full border-r p-7 border-gray-20 bg-gray-30 ml-[-225px];
-    @apply lg:relative lg:ml-[-310px];
+    @apply absolute left-0 z-10 min-w-c310 w-c310 h-full border-r p-7 border-gray-20 bg-gray-30 -ml-c225;
+    @apply lg:relative lg:-ml-c310;
     &.active {
-      @apply ml-0 left-[85px];
+      @apply ml-0 left-c85;
       @apply lg:left-0;
     }
     &__title {
@@ -59,18 +67,18 @@
       }
     }
     &__toggle {
-      @apply absolute top-[35px] right-[-50px];
+      @apply absolute top-c35 -right-c50;
     }
   }
 }
 
 .page {
-  @apply w-full h-screen flex;
+  @apply flex h-screen w-full min-w-0 flex-1;
   &__wrapper {
     @apply p-7 w-full overflow-y-scroll;
     &-title {
       @apply text-black-10 text-3xl font-medium flex mb-9 ml-8;
-      > button {
+      & > button {
         @apply mr-5;
       }
     }
@@ -81,8 +89,8 @@
       @apply lg:flex;
       &__right,
       &__left {
-        @apply lg:w-1/2;
         @apply w-full;
+        @apply lg:w-1/2;
       }
       &__left {
         @apply border-r-0 border-r-gray-40 pr-0 mb-6;
@@ -96,7 +104,7 @@
         @apply mb-8;
         &-item {
           @apply grid grid-cols-2 mb-5;
-          > span {
+          & > span {
             &:nth-child(1) {
               @apply text-black-10 font-medium text-lg;
             }
@@ -115,7 +123,7 @@
           @apply w-full;
           thead {
             th {
-              @apply text-left text-[17px] text-gray-60 font-normal;
+              @apply text-left text-c17 text-gray-60 font-normal;
               &:last-child {
                 @apply text-right;
               }
@@ -157,14 +165,14 @@
     }
   }
   &-item {
-    @apply py-6 px-9 mb-11 bg-white border-2 border-gray-20 rounded-[10px];
+    @apply py-6 px-9 mb-11 bg-white border-2 border-gray-20 rounded-c10;
     &__info {
-      @apply mb-[50px] grid grid-cols-1;
+      @apply mb-c50 grid grid-cols-1;
       @apply lg:grid-cols-6;
-      > div {
+      & > div {
         @apply text-gray-60 text-lg font-normal flex flex-row items-center;
         @apply lg:flex-col lg:items-start;
-        > div {
+        & > div {
           @apply text-black-10 ml-2 truncate;
           @apply lg:ml-0;
         }
@@ -176,14 +184,14 @@
         @apply text-gray-60 text-lg font-normal mr-6;
       }
       .-item {
-        @apply h-[39px] min-w-0 mr-5 mb-3 bg-gray-40 border border-gray-50 px-6 rounded flex items-center justify-center font-medium text-lg truncate;
+        @apply h-c39 min-w-0 mr-5 mb-3 bg-gray-40 border border-gray-50 px-6 rounded flex items-center justify-center font-medium text-lg truncate;
       }
     }
     &__footer {
       @apply flex items-start justify-start flex-col;
       @apply lg:flex-row lg:items-center lg:justify-between;
       .-left {
-        > div {
+        & > div {
           @apply text-lg;
           @apply first:text-gray-60 first:font-medium;
           @apply last:text-black-10 last:font-semibold;
@@ -192,6 +200,29 @@
       .-right {
         @apply flex items-center w-full justify-end;
         @apply lg:w-auto lg:justify-start;
+      }
+    }
+    &__quantity {
+      &-wrapper {
+        @apply flex flex-col mt-5 text-black-10 font-normal text-lg;
+        @apply sm:flex-row;
+        .-actions {
+          @apply whitespace-nowrap flex;
+          > * {
+            @apply flex-1;
+            @apply sm:flex-none;
+          }
+        }
+        .-title {
+          @apply flex-1 truncate;
+        }
+        .-price {
+          @apply ml-0;
+          @apply sm:mx-4;
+        }
+        .-remove {
+          @apply text-gray-20 w-4 ml-4 min-w-0 max-w-c16;
+        }
       }
     }
   }
@@ -205,7 +236,7 @@
     }
     input {
       &:not([type="radio"], [type="checkbox"]) {
-        @apply border-2 rounded-md border-gray-20 h-[50px] w-full pl-5 bg-white text-black-10 text-lg font-medium placeholder:text-gray-80;
+        @apply border-2 rounded-md border-gray-20 h-c50 w-full pl-5 bg-white text-black-10 text-lg font-medium placeholder:text-gray-80;
       }
     }
   }
@@ -215,29 +246,29 @@
       @apply text-black-10 text-lg font-medium mb-3;
     }
     textarea {
-      @apply border-2 rounded-md border-gray-20 min-h-[140px] w-full pl-5 pt-4 bg-white text-black-10 text-lg font-medium;
+      @apply border-2 rounded-md border-gray-20 min-h-c140 w-full pl-5 pt-4 bg-white text-black-10 text-lg font-medium;
     }
   }
   &-dropdown {
     &-multiple {
-      @apply relative;
+      @apply relative flex flex-col;
       .star-dropdown-multiple__selected {
         &.active {
           @apply border-black-10;
         }
       }
-      > label {
+      & > label {
         @apply text-black-10 text-lg font-medium mb-3;
       }
       &__wrapper {
-        @apply w-full;
+        @apply w-full cursor-pointer;
       }
       &__selected {
-        @apply flex items-center border-2 rounded-md border-gray-20 h-[50px] w-full px-5;
+        @apply flex items-center border-2 rounded-md border-gray-20 h-c50 w-full px-5;
 
         span {
           @apply flex-1 truncate text-black-10 text-lg font-medium;
-          > svg {
+          & > svg {
             @apply whitespace-nowrap;
           }
           &.-placeholder {
@@ -246,8 +277,8 @@
         }
       }
       &__list {
-        @apply absolute bg-white border-2 border-gray-20 rounded-md overflow-auto mt-[1px] pt-7 px-5 pb-5 flex flex-col w-full max-h-52;
-        > label {
+        @apply absolute bg-white border-2 border-gray-20 rounded-md overflow-auto mt-c1 pt-7 px-5 pb-5 flex flex-col w-full max-h-52;
+        & > label {
           @apply text-lg font-medium text-black-10;
           input {
             @apply mr-3 w-4 h-4;
@@ -257,9 +288,9 @@
     }
   }
   &-btn {
-    @apply flex items-center justify-center h-[42px] bg-white border-gray-20 border-2 rounded-[3px] px-5 text-gray-60 font-medium text-lg whitespace-nowrap;
+    @apply flex items-center justify-center h-c42 bg-white border-gray-20 border-2 rounded-c3 px-5 text-gray-60 font-medium text-lg whitespace-nowrap;
     &.lg {
-      @apply h-[63px] rounded-[5px];
+      @apply h-c63 rounded-c5;
     }
     &__primary {
       @apply bg-blue-10 border-blue-10 text-white;
@@ -272,18 +303,27 @@
     }
   }
   &-badge {
-    @apply inline-flex items-center justify-center h-[25px] bg-gray-20 text-black rounded-[3px] px-[6px]  font-normal text-[17px];
+    @apply inline-flex items-center justify-center h-c25 bg-gray-20 text-black rounded-c3 px-c6  font-normal text-c17;
     &__primary {
-      @apply bg-blue-10 text-white #{!important};
+      @apply bg-blue-10 text-white;
     }
     &__success {
-      @apply bg-green-10 text-white #{!important};
+      @apply bg-green-10 text-white;
     }
     &__yellow {
-      @apply bg-yellow-10 text-white #{!important};
+      @apply bg-yellow-10 text-white;
     }
     &__orange {
-      @apply bg-orange-10 text-white #{!important};
+      @apply bg-orange-10 text-white;
+    }
+  }
+  &-quantity {
+    @apply border-2 border-blue-30 flex items-center rounded-xl w-c70 max-w-c70 h-6;
+    button {
+      @apply text-base font-normal text-gray-100 px-2;
+    }
+    input {
+      @apply text-sm font-medium text-black-10 appearance-none outline-none text-center min-w-0;
     }
   }
 }

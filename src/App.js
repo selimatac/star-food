@@ -1,5 +1,5 @@
 import { Sidebar, Orders } from "./components";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home, NewOrder, OrderList } from "./pages";
 const App = () => {
   return (
@@ -9,8 +9,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="orders" element={<Orders />}>
-            <Route index path="create" element={<NewOrder />}></Route>
             <Route path="list/:id" element={<OrderList />}></Route>
+            <Route path="create" element={<NewOrder />}></Route>
           </Route>
         </Routes>
       </div>

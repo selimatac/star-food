@@ -1,10 +1,15 @@
 import { MenuIcon } from "@heroicons/react/outline";
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { OrderItem } from "../components";
+import { useFirestoreConnect } from "react-redux-firebase";
+import { useSelector } from "react-redux";
 
 const OrderList = () => {
-  const data = [];
+  useFirestoreConnect("orders");
+  const data = useSelector((state) => state.firestore.ordered.orders);
+  const params = useParams();
+
   return (
     <div className="order-list">
       <div className="order-list__header">
@@ -21,9 +26,11 @@ const OrderList = () => {
         </NavLink>
       </div>
       <div className="order-list__body">
-        {data.map((x) => (
-          <OrderItem data={x} />
-        ))}
+        {data
+          ?.filter((f) => f.orderStatus === params.id)
+          .map((x, index) => (
+            <OrderItem key={index} data={x} />
+          ))}
       </div>
     </div>
   );
