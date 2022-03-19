@@ -9,7 +9,7 @@ const Orders = () => {
   let location = useLocation();
   let params = useParams();
   let navigate = useNavigate();
-  useFirestoreConnect({collection:"orders", orderBy: ["timestamp", "desc"]});
+  useFirestoreConnect({collection:"orders", orderBy: ["orderDateTime", "desc"]});
   const orders = useSelector((state) => state.firestore.ordered.orders);
   const [sidebarMenuData, setSidebarMenuData] = useState([]);
   const menuData = [
