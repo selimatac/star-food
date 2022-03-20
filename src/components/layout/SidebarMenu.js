@@ -1,31 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { MenuIcon } from "@heroicons/react/outline";
 import ClickAwayListener from "react-click-away-listener";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMenu } from "../../store/actions/themeActions";
 
 const SidebarMenu = ({ title, data }) => {
   const location = useLocation();
-  const [open, setOpen] = useState(window.innerWidth > 1024);
+  const dispatch = useDispatch();
+  const open = useSelector((state) => state.theme.isShow);
   const handleResize = () => {
-    window.innerWidth < 1024 && open === true && setOpen(false)
+    window.innerWidth < 1024 && open === true && dispatch(toggleMenu(false));
   };
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    window.innerWidth < 1024 && setOpen(false);
+    window.innerWidth < 1024 && dispatch(toggleMenu(false));
   }, [location]);
 
   return (
     <ClickAwayListener
       onClickAway={() =>
-        window.innerWidth < 1024 && open === true && setOpen(false)
+        window.innerWidth < 1024 && open === true && dispatch(toggleMenu(false))
       }
     >
       <div className={`sidebar-menu ${open ? "active" : ""}`}>
@@ -46,7 +49,7 @@ const SidebarMenu = ({ title, data }) => {
         <button
           type="button"
           className="sidebar-menu__toggle"
-          onClick={() => setOpen(!open)}
+          onClick={() => dispatch(toggleMenu(!open))}
         >
           <MenuIcon className="w-6 text-black" />
         </button>

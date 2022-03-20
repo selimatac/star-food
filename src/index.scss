@@ -77,7 +77,7 @@
   &__wrapper {
     @apply p-7 w-full overflow-y-scroll;
     &-title {
-      @apply text-black-10 text-3xl font-medium flex mb-9 ml-8;
+      @apply text-black-10 text-3xl font-medium flex mb-9 ;
       & > button {
         @apply mr-5;
       }
@@ -103,7 +103,8 @@
       &__info {
         @apply mb-8;
         &-item {
-          @apply grid grid-cols-2 mb-5;
+          @apply grid grid-cols-1 mb-5;
+          @apply md:grid-cols-2;
           & > span {
             &:nth-child(1) {
               @apply text-black-10 font-medium text-lg;

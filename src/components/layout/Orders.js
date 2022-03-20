@@ -3,14 +3,18 @@ import React, { useEffect, useState } from "react";
 import { SidebarMenu } from "../../components";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useFirestoreConnect } from "react-redux-firebase";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMenu } from "../../store/actions/themeActions";
+import { MenuIcon } from "@heroicons/react/outline";
 
 const Orders = () => {
   let location = useLocation();
   let params = useParams();
   let navigate = useNavigate();
+  const dispatch = useDispatch();
   useFirestoreConnect("orders");
   const orders = useSelector((state) => state.firestore.ordered.orders);
+  const isShow = useSelector((state) => state.theme.isShow);
   const [sidebarMenuData, setSidebarMenuData] = useState([]);
   const menuData = [
     {
@@ -43,7 +47,6 @@ const Orders = () => {
   }, [orders]);
 
   useEffect(() => {
-    console.log(location);
     !params.id &&
       location.pathname !== "/orders/create" &&
       navigate(`list/${menuData[0].param}`, {
@@ -55,7 +58,12 @@ const Orders = () => {
     <div className="page">
       <SidebarMenu title="Orders" data={sidebarMenuData} />
       <main className="page__wrapper">
-        <h1 className="page__wrapper-title">{location?.state?.title}</h1>
+        <h1 className="page__wrapper-title">
+          <button type="button" onClick={() => dispatch(toggleMenu(!isShow))}>
+            <MenuIcon className="w-6 text-black" />
+          </button>
+          {location?.state?.title}
+        </h1>
         <div className="page__content">
           <Outlet />
         </div>
