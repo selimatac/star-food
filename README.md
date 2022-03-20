@@ -10,4 +10,4 @@ Or Live Demo [https://star-food.vercel.app/](https://star-food.vercel.app/)
 ## Screens
 
 ![New Order](https://github.com/selimatac/star-food/blob/master/src/assets/screens/new-order.jpg)
-![Orders](https://github.com/selimatac/star-food/blob/master/src/assets/screens/new-order.jpg)
+![Orders](https://github.com/selimatac/star-food/blob/master/src/assets/screens/orders.jpg)
