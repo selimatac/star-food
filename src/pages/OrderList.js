@@ -6,7 +6,11 @@ import { useFirestoreConnect } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 
 const OrderList = () => {
-  useFirestoreConnect("orders");
+   useFirestoreConnect({
+    collection: "orders",
+    orderBy: ["orderDateTime", "desc"],
+    limit: 10,
+  });
   const data = useSelector((state) => state.firestore.ordered.orders);
   const params = useParams();
 
