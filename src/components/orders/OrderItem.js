@@ -6,7 +6,6 @@ import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
 import { useDispatch } from "react-redux";
 
 const OrderItem = ({ data }) => {
-  useFirestoreConnect("orders");
   const firestore = useFirestore();
   const dispatch = useDispatch();
   const moveToCooking = async () => {

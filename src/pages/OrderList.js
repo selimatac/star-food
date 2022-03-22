@@ -2,15 +2,9 @@ import { MenuIcon } from "@heroicons/react/outline";
 import React from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { OrderItem } from "../components";
-import { useFirestoreConnect } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 
 const OrderList = () => {
-   useFirestoreConnect({
-    collection: "orders",
-    orderBy: ["orderDateTime", "desc"],
-    limit: 10,
-  });
   const data = useSelector((state) => state.firestore.ordered.orders);
   const params = useParams();
 

@@ -15,7 +15,6 @@ const Orders = () => {
   useFirestoreConnect({
     collection: "orders",
     orderBy: ["orderDateTime", "desc"],
-    limit: 10,
   });
   const orders = useSelector((state) => state.firestore.ordered.orders);
   const isShow = useSelector((state) => state.theme.isShow);
